@@ -1,4 +1,33 @@
 <html>
+<style>
+ul { list-style: none;
+  
+  li {
+    display: inline-block;
+    background-color: black;
+    margin: 15px; // space between circles
+    border-radius: 50%;
+    
+    a {
+      color: white;
+      display: table-cell;
+      vertical-align: middle; 
+      text-align: center;
+      text-decoration: none;
+
+      // icon size is controlled by class="icon-5x"
+      // below is to control the circle sizes
+      height: 150px;
+      width: 150px;   
+      
+      &:hover, &:active {
+        color: lightsalmon;
+        text-decoration: none;
+      }
+    }
+  }
+}
+</style>
 
         <head>
                 <title>Gaurang Patel</title>
