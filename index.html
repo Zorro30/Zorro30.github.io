@@ -7,7 +7,9 @@
 	<meta name="description" content="Gaurang's Website">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="images/service-1.svg">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+		integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<!-- STYLESHEETS -->
 	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all">
@@ -16,6 +18,8 @@
 	<link rel="stylesheet" href="css/slick.css" type="text/css" media="all">
 	<link rel="stylesheet" href="css/animate.css" type="text/css" media="all">
 	<link rel="stylesheet" href="css/magnific-popup.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/variables.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/components.css" type="text/css" media="all">
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
 
 	<!--[if lt IE 9]>
@@ -88,6 +92,14 @@
 			<a href="index.html">
 				<!-- <img src="images/Gaurang_patel.svg" alt="Gaurang"/> -->
 			</a>
+		</div>
+
+		<!-- theme switcher -->
+		<div class="theme-switch">
+			<button onclick="toggleTheme()" class="btn-theme" title="Toggle Light/Dark Mode">
+				<i id="theme-icon" class="far fa-moon"></i>
+				<span id="theme-text">Dark Mode</span>
+			</button>
 		</div>
 
 		<!-- main menu -->
@@ -490,7 +502,7 @@
 							<div class="timeline-container wow fadeInUp">
 								<div class="content">
 									<span class="time">2013 - 2017</span>
-									<h3 class="title">Bachelor’s Of Engineering in Electronics & Telecommunication</h3>
+									<h3 class="title">Bachelor's Of Engineering in Electronics & Telecommunication</h3>
 									<p>K.J. Somaiya College of Engineering, Mumbai</p>
 								</div>
 							</div>
@@ -543,7 +555,7 @@
 									<!-- <br> -->
 									<!-- <span class="time">2019 - 2021</span>
 									<h3 class="title">Software Engineer @ Fynd</h3>
-									<p>Building robust RESTful API’s to scale the infrastructure to 10M RPM and contain
+									<p>Building robust RESTful API's to scale the infrastructure to 10M RPM and contain
 										avg. response time of an API to 30ms using TDD.</p> -->
 								</div>
 							</div>
@@ -561,7 +573,7 @@
 									<br>
 									<span class="time">Nov 2019 - Apr 2021</span>
 									<h3 class="title">Software Engineer @ Fynd</h3>
-									<p>⸰ Built robust RESTful API’s to scale the infrastructure to 1K RPS and contain
+									<p>⸰ Built robust RESTful API's to scale the infrastructure to 1K RPS and contain
 										avg. response time of an API to 30ms using TDD.</p>
 								</div>
 							</div>
@@ -1078,18 +1090,47 @@
 							const scriptURL = 'https://script.google.com/macros/s/AKfycbxQxApLkyF-lfleg4Yi1t2WxRv76Dgvjap7_9XQxQ/exec'
 							const form = document.forms['submit-to-google-sheet']
 
-							form.addEventListener('submit', e => {
-								e.preventDefault()
-								fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-									.then(response => console.log('Success!', response))
-									.catch(error => console.error('Error!', error.message))
-								onClick();
-							}
-							)
+							form.addEventListener('submit', function (e) {
+								e.preventDefault();
+								const formData = new FormData(form);
 
-							function onClick() {
-								alert("Thanks for contacting!")
-								document.location.reload();
+								// Show loading indicator
+								const submitBtn = form.querySelector('button[type="submit"]');
+								const originalText = submitBtn.innerHTML;
+								submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+								submitBtn.disabled = true;
+
+								fetch(scriptURL, {
+									method: 'POST',
+									body: formData
+								})
+									.then(response => {
+										if (response.ok) {
+											showSuccessMessage('Your message has been sent successfully!');
+											form.reset();
+										} else {
+											showErrorMessage('There was a problem sending your message. Please try again.');
+										}
+									})
+									.catch(error => {
+										console.error('Error!', error.message);
+										showErrorMessage('There was a problem sending your message. Please try again.');
+									})
+									.finally(() => {
+										// Restore button state
+										submitBtn.innerHTML = originalText;
+										submitBtn.disabled = false;
+									});
+							});
+
+							function showSuccessMessage(message) {
+								const alertBox = '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + message + '</div>';
+								document.querySelector('#contact-form .messages').innerHTML = alertBox;
+							}
+
+							function showErrorMessage(message) {
+								const alertBox = '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + message + '</div>';
+								document.querySelector('#contact-form .messages').innerHTML = alertBox;
 							}
 						</script>
 						<!-- Contact Form end -->
@@ -1130,7 +1171,7 @@
 	<script src="js/parallax.min.js"></script>
 	<script src="js/jquery.magnific-popup.min.js"></script>
 	<script src="js/custom.js"></script>
-
+	<script src="js/theme.js"></script>
 </body>
 
 </html>
